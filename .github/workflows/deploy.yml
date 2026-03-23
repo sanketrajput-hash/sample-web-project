@@ -1,0 +1,20 @@
+name: Deploy to WSL Apache
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is 'master'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Sync files to Apache directory
+        run: |
+          # rsync cleanly copies your repo files to the Apache folder
+          # --exclude prevents syncing the git history and workflow files
+          rsync -avz --delete --exclude='.git/' --exclude='.github/' ./ /var/www/html/
